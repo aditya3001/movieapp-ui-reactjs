@@ -1,0 +1,33 @@
+.heading {
+    background-color: #ff9999;
+    text-align: center;
+    padding: 8px;
+    font-size: 1rem;
+}
+
+.grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: nowrap;
+}
+
+.gridList{
+    flex-wrap: nowrap;
+    transform: translateZ(0);
+
+}
+
+.container{
+    display: flex;
+}
+
+.released-movie{
+    width: 76%;
+    margin: 16px;
+}
+
+.filter{
+    width: 24%;
+    margin: 16px;
+
+}
