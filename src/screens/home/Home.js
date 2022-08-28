@@ -1,10 +1,12 @@
-import { GridListTileBar } from "@material-ui/core";
+import { FormHelperText, GridListTileBar, TextField } from "@material-ui/core";
 import { GridListTile } from "@material-ui/core";
 import { IconButton } from "@material-ui/core";
 import { GridList } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import Header from "../../common/header/Header";
-import { FormControl, Input, InputLabel } from "@mui/material";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
 import { Button } from "@material-ui/core";
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -51,12 +53,12 @@ const styles = theme => ({
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
     },
-  },
 };
 
 const Home = (props) => {
@@ -69,41 +71,43 @@ const Home = (props) => {
 
     const { classes } = props;
     const genres = [
-        'Oliver Hansen',
-        'Van Henry',
+        'Drama',
+        'Action',
         'April Tucker',
-        'Ralph Hubbard',
-        'Omar Alexander',
-        'Carlos Abbott',
-        'Miriam Wagner',
-        'Bradley Wilkerson',
-        'Virginia Andrews',
-        'Kelly Snyder',
+        
     ];
     const FilterCard = () => {
         const filterHandler = (event) => {
             event.preventDefault();
-            console.log(movieName,genre);
+            console.log(movieName);
+            fetchReleasedMovie();
 
+        }
+        const movieNameHandler = (event) => {
+            setMovieName(event.target.value);
         }
         const handleGenreChange = (event) => {
             const {
                 target: { value },
-              } = event;
-              setGenre(
+            } = event;
+            setGenre(
                 typeof value === 'string' ? value.split(',') : value,
-              );
+            );
         }
+
         return (
             <Card sx={{ maxWidth: 275 }} style={{ padding: 10 }}>
                 <CardHeader title={<div className={classes.title}>FIND MOVIES BY:</div>} />
                 <CardContent>
                     <FormControl className="formControl">
-                        <InputLabel htmlFor="movieName">Movie Name</InputLabel>
-                        <Input id="movieName" />
+                        <InputLabel htmlFor="mov">Movie Name</InputLabel>
+                        
+                        <Input id="mov" 
+                        value={movieName !== "" ? movieName : ""}
+                        onChange={movieNameHandler} />
                     </FormControl>
                 </CardContent>
-                {/* <CardContent>
+                <CardContent>
                     <FormControl sx={{ m: 1, width: 200 }}>
                         <InputLabel htmlFor="genre">GENRE</InputLabel>
                         <Select
@@ -126,8 +130,11 @@ const Home = (props) => {
                         </Select>
 
                     </FormControl>
-                </CardContent> */}
-                   
+                </CardContent>
+                <CardContent>
+                    
+                </CardContent>
+
                 <CardActions>
                     <Button variant="contained" color="primary" onClick={filterHandler}>APPLY</Button>
                 </CardActions>
@@ -136,52 +143,25 @@ const Home = (props) => {
         )
     }
 
-    const FilterForm = () => {
-        // const filterHandler = () => {
-
-        // }
-        return (<div>
-            {/* <div className={classes.title}>FIND MOVIES1 BY:</div> */}
-            <FormControl className="formControl">
-                <InputLabel htmlFor="movieName">Movie Name</InputLabel>
-                <Input id="movieName" />
-            </FormControl>
-
-            <FormControl required className="formControl">
-                <InputLabel htmlFor="email">Email</InputLabel>
-                <Input id="email" />
-
-            </FormControl>
-
-            <FormControl required className="formControl">
-                <InputLabel htmlFor="password">Password</InputLabel>
-                <Input id="password" aria-describedby="my-helper-text" />
-
-            </FormControl>
-            <FormControl required className="formControl">
-                <InputLabel htmlFor="contact">Contact No.</InputLabel>
-                <Input id="contact" />
-
-            </FormControl><br></br>
-            {/* <Button
-                variant="contained"
-                onClick={filterHandler}
-                color="primary"
-            >APPLY</Button> */}
-        </div>)
-    }
+    
 
 
     const fetchReleasedMovie = () => {
-        const url = "http://localhost:8085/api/v1/movies?page=1&limit=10&status=RELEASED";
+        let url = "http://localhost:8085/api/v1/movies?page=1&limit=10&status=RELEASED";
         // for (var key in filter) {
         //     if (filter[key]) {
         //         console.log(key + " -> " + filter[key]);
         //         url+="&"+key+"="+filter[key];
         //     }
         // }
-        
 
+        if(movieName!==""){
+            url+="&title="+movieName;
+        }
+        if(genre!=[]){
+            url+="&genre="+genre.join(',');
+
+        }
         fetch(url)
             .then(res => res.json())
             .then(
@@ -208,17 +188,14 @@ const Home = (props) => {
                     setIsLoaded(true);
                     setItems(result.movies);
                 },
-                // Note: it's important to handle errors here
-                // instead of a catch() block so that we don't swallow
-                // exceptions from actual bugs in components.
                 (error) => {
                     setIsLoaded(true);
                     setError(error);
                 }
             )
 
-        fetchReleasedMovie(null);
-    }, [{releasedMovie}])
+        fetchReleasedMovie();
+    }, [])
 
 
 

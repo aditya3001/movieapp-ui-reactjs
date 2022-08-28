@@ -24,7 +24,6 @@ const Header = (props) => {
 
     const [modalStyle] = useState(getModalStyle);
     const [open, setOpen] = useState(false);
-    const [st, setSt] = useState()
     const handleOpen = () => {
         setOpen(true);
     };
