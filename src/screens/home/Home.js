@@ -19,10 +19,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
-
-
-
-
+import { Link } from "react-router-dom";
 import './Home.css';
 
 const styles = theme => ({
@@ -68,13 +65,12 @@ const Home = (props) => {
     const [releasedMovie, setReleasedMovie] = useState([]);
     const [genre, setGenre] = React.useState([]);
     const [movieName, setMovieName] = React.useState('');
-
     const { classes } = props;
     const genres = [
         'Drama',
         'Action',
         'April Tucker',
-        
+
     ];
     const FilterCard = () => {
         const filterHandler = (event) => {
@@ -85,6 +81,7 @@ const Home = (props) => {
         }
         const movieNameHandler = (event) => {
             setMovieName(event.target.value);
+
         }
         const handleGenreChange = (event) => {
             const {
@@ -101,10 +98,10 @@ const Home = (props) => {
                 <CardContent>
                     <FormControl className="formControl">
                         <InputLabel htmlFor="mov">Movie Name</InputLabel>
-                        
-                        <Input id="mov" 
-                        value={movieName !== "" ? movieName : ""}
-                        onChange={movieNameHandler} />
+                        <Input id="mov"
+                
+                            value={movieName !== "" ? movieName : ""}
+                            onChange={movieNameHandler} />
                     </FormControl>
                 </CardContent>
                 <CardContent>
@@ -132,7 +129,28 @@ const Home = (props) => {
                     </FormControl>
                 </CardContent>
                 <CardContent>
-                    
+                    <FormControl sx={{ m: 1, width: 200 }}>
+                        <InputLabel htmlFor="genre">GENRE</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="genre"
+                            multiple
+                            value={genre}
+                            label="Genre"
+                            onChange={handleGenreChange}
+                            renderValue={(selected) => selected.join(', ')}
+                            MenuProps={MenuProps}
+
+                        >
+                            {genres.map((g) => (
+                                <MenuItem key={g} value={g}>
+                                    <Checkbox checked={genre.indexOf(g) > -1} />
+                                    <ListItemText primary={g} />
+                                </MenuItem>
+                            ))}
+                        </Select>
+
+                    </FormControl>
                 </CardContent>
 
                 <CardActions>
@@ -143,23 +161,18 @@ const Home = (props) => {
         )
     }
 
-    
+
 
 
     const fetchReleasedMovie = () => {
         let url = "http://localhost:8085/api/v1/movies?page=1&limit=10&status=RELEASED";
-        // for (var key in filter) {
-        //     if (filter[key]) {
-        //         console.log(key + " -> " + filter[key]);
-        //         url+="&"+key+"="+filter[key];
-        //     }
-        // }
 
-        if(movieName!==""){
-            url+="&title="+movieName;
+
+        if (movieName !== "") {
+            url += "&title=" + movieName;
         }
-        if(genre!=[]){
-            url+="&genre="+genre.join(',');
+        if (genre != []) {
+            url += "&genre=" + genre.join(',');
 
         }
         fetch(url)
@@ -169,9 +182,7 @@ const Home = (props) => {
                     setIsLoaded(true);
                     setReleasedMovie(result.movies);
                 },
-                // Note: it's important to handle errors here
-                // instead of a catch() block so that we don't swallow
-                // exceptions from actual bugs in components.
+
                 (error) => {
                     setIsLoaded(true);
                     setError(error);
@@ -228,16 +239,24 @@ const Home = (props) => {
                 <div className="grid">
                     <GridList cellHeight={350} className="gridList" cols={4}>
                         {releasedMovie.map(tile => (
+
                             <GridListTile>
-                                <img src={tile.poster_url} alt={tile.title} />
-                                <GridListTileBar
-                                    title={tile.title}
-                                    subtitle={<span>Release Date: {tile.release_date}</span>}
-                                    actionIcon={
-                                        <IconButton>
-                                        </IconButton>
-                                    }
-                                />
+                                <Link to={{
+                                    pathname: `movie/${tile.id}`,
+                                    state: tile // your data array of objects
+                                }} >
+
+                                    <img src={tile.poster_url} alt={tile.title} />
+                                    <GridListTileBar
+                                        title={tile.title}
+                                        subtitle={<span>Release Date: {tile.release_date}</span>}
+                                        actionIcon={
+                                            <IconButton>
+                                            </IconButton>
+                                        }
+                                    />
+                                </Link>
+
                             </GridListTile>
                         ))}
                     </GridList>

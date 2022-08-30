@@ -17,10 +17,10 @@ function Controller(){
           path="/"
           render={(props) => <Home {...props} baseUrl={baseUrl} />}
         />
-        {/* <Route
+        <Route
           path="/movie/:id"
           render={(props) => <Details {...props} baseUrl={baseUrl} />}
-        /> */}
+        />
         <Route
           path="/bookshow/:id"
           render={(props) => <BookShow {...props} baseUrl={baseUrl} />}

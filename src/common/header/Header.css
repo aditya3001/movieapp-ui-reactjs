@@ -10,6 +10,9 @@
 .login-btn {
     float: right;
 }
+.book-show-btn {
+    float: right;
+}
 
 .paper {
     position: absolute;

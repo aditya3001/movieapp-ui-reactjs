@@ -1,11 +1,10 @@
 import { Button, Modal } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { createContext, useState, useContext} from "react";
 import "./Header.css"
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { FormControl, Input, InputLabel } from "@mui/material";
-import { TabPanel, TabContext,TabList } from "@mui/lab";
-
+import { TabPanel, TabContext, TabList } from "@mui/lab";
 
 function rand() {
     return Math.round(Math.random() * 20) - 10;
@@ -24,21 +23,34 @@ const Header = (props) => {
 
     const [modalStyle] = useState(getModalStyle);
     const [open, setOpen] = useState(false);
-    const handleOpen = () => {
-        setOpen(true);
-    };
+    const [isLogin, setIsLogin] = useState(false)
+    const [value, setValue] = React.useState('1');
+    const isDetail = props.isDetail;
+
     const handleClose = () => {
         setOpen(false);
     };
-    const [value, setValue] = React.useState('1');
-
+    const handleOpen = () => {
+        setOpen(true);
+    };
     const handleChange = (event, newValue) => {
         setValue(newValue);
     }
 
+    const LogButton = ({ openHandler }) => {
+
+        const handleLogOut = () => {
+            setIsLogin(false)
+        }
+
+        return isLogin ? (<div><Button variant="contained" className="login-btn" onClick={handleLogOut}>LOGOUT</Button>
+        </div>) : (<div><Button variant="contained" className="login-btn" onClick={handleOpen} >LOGIN</Button></div>)
+    }
+
     const LoginForm = () => {
         const loginHandler = () => {
-
+            setIsLogin(true);
+            setOpen(false);
         }
         return (<div>
             <FormControl required className="formControl">
@@ -103,9 +115,8 @@ const Header = (props) => {
     return (
         <div>
             <div className="header-fixed">
-                <Button variant="contained" className="login-btn" onClick={handleOpen} >LOGIN</Button>
-                <Button variant="contained" className="login-btn">LOGOUT</Button>
-
+                <LogButton></LogButton>
+                {isDetail ? <Button variant="contained" color="primary" className="book-show-btn" style={{marginRight:10}}>Book Show</Button>:null}
                 <Modal
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
@@ -135,12 +146,13 @@ const Header = (props) => {
                         <SignInForm></SignInForm>
                         </TabPanel>
                         </TabContext> */}
+                {console.log(isDetail)}
 
                         <Box sx={{ width: '100%', typography: 'body1' }}>
                             <TabContext value={value}>
                                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                    <TabList onChange={handleChange} aria-label="lab API tabs example" 
-                                    variant="fullWidth">
+                                    <TabList onChange={handleChange} aria-label="lab API tabs example"
+                                        variant="fullWidth">
                                         <Tab label="LOGIN" value="1" />
                                         <Tab label="SIGNIN" value="2" />
                                     </TabList>
