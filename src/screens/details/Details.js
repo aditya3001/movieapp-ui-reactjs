@@ -1,5 +1,5 @@
 import { GridList, GridListTile, GridListTileBar, Typography } from "@material-ui/core";
-import React, { createContext } from "react";
+import React from "react";
 import Header from "../../common/header/Header";
 import "./Details.css";
 import YouTube from "react-youtube";

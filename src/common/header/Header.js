@@ -1,11 +1,11 @@
 import { Button, Modal } from "@material-ui/core";
-import React, { createContext, useState, useContext} from "react";
+import React, { useState} from "react";
 import "./Header.css"
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { FormControl, Input, InputLabel } from "@mui/material";
 import { TabPanel, TabContext, TabList } from "@mui/lab";
-
+import logo from '../../assets/logo.svg';
 function rand() {
     return Math.round(Math.random() * 20) - 10;
 }
@@ -115,6 +115,7 @@ const Header = (props) => {
     return (
         <div>
             <div className="header-fixed">
+                <img src={logo} className="logo-img" style={{objectFit:"contain"}}></img>
                 <LogButton></LogButton>
                 {isDetail ? <Button variant="contained" color="primary" className="book-show-btn" style={{marginRight:10}}>Book Show</Button>:null}
                 <Modal
@@ -124,29 +125,7 @@ const Header = (props) => {
                     onClose={handleClose}
                 >
                     <div style={modalStyle} className="paper">
-                        {/* <TabContext value={value}>
-
-                        <Box sx={{ width: '100%' }}>
-                            <Tabs
-                                value={value}
-                                onChange={handleChange}
-                                textColor="secondary"
-                                indicatorColor="secondary"
-                                aria-label="secondary tabs example"
-                            >
-                                <Tab value="one" label="Item One" />
-                                <Tab value="two" label="Item Two" />
-                            </Tabs>
-                        </Box>
-
-                        <TabPanel value={value} index={0}>
-                            <LoginForm></LoginForm>
-                        </TabPanel>
-                        <TabPanel value={value} index={1}>
-                        <SignInForm></SignInForm>
-                        </TabPanel>
-                        </TabContext> */}
-                {console.log(isDetail)}
+                    
 
                         <Box sx={{ width: '100%', typography: 'body1' }}>
                             <TabContext value={value}>

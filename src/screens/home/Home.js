@@ -1,4 +1,4 @@
-import { FormHelperText, GridListTileBar, TextField } from "@material-ui/core";
+import { GridListTileBar, TextField } from "@material-ui/core";
 import { GridListTile } from "@material-ui/core";
 import { IconButton } from "@material-ui/core";
 import { GridList } from "@material-ui/core";
@@ -16,7 +16,6 @@ import CardContent from '@mui/material/CardContent';
 import { CardHeader } from '@mui/material';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import { Link } from "react-router-dom";
@@ -64,7 +63,11 @@ const Home = (props) => {
     const [items, setItems] = useState([]);
     const [releasedMovie, setReleasedMovie] = useState([]);
     const [genre, setGenre] = React.useState([]);
+    const [artist, setArtist] = React.useState([]);
     const [movieName, setMovieName] = React.useState('');
+    const [startDate, setStartDate] = React.useState('');
+    const [endDate, setEndDate] = React.useState('');
+
     const { classes } = props;
     const genres = [
         'Drama',
@@ -72,6 +75,11 @@ const Home = (props) => {
         'April Tucker',
 
     ];
+    const artists = [
+        'Drama',
+        'Action',
+        'April Tucker',
+    ]
     const FilterCard = () => {
         const filterHandler = (event) => {
             event.preventDefault();
@@ -92,6 +100,35 @@ const Home = (props) => {
             );
         }
 
+        const selectStartDate = (event) => {
+            const {
+                target: { value },
+            } = event;
+            console.log(value)
+            setStartDate(
+                value
+            );
+        }
+
+        const selectEndDate = (event) => {
+            const {
+                target: { value },
+            } = event;
+            console.log(value)
+            setEndDate(
+                value
+            );
+        }
+
+        const handleArtistListChange = (event) => {
+            const {
+                target: { value },
+            } = event;
+            setArtist(
+                typeof value === 'string' ? value.split(',') : value,
+            );
+        }
+
         return (
             <Card sx={{ maxWidth: 275 }} style={{ padding: 10 }}>
                 <CardHeader title={<div className={classes.title}>FIND MOVIES BY:</div>} />
@@ -99,7 +136,7 @@ const Home = (props) => {
                     <FormControl className="formControl">
                         <InputLabel htmlFor="mov">Movie Name</InputLabel>
                         <Input id="mov"
-                
+                            sx={{ width: 200 }}
                             value={movieName !== "" ? movieName : ""}
                             onChange={movieNameHandler} />
                     </FormControl>
@@ -108,6 +145,7 @@ const Home = (props) => {
                     <FormControl sx={{ m: 1, width: 200 }}>
                         <InputLabel htmlFor="genre">GENRE</InputLabel>
                         <Select
+                            sx={{ width: 200 }}
                             labelId="demo-simple-select-label"
                             id="genre"
                             multiple
@@ -129,22 +167,23 @@ const Home = (props) => {
                     </FormControl>
                 </CardContent>
                 <CardContent>
-                    <FormControl sx={{ m: 1, width: 200 }}>
-                        <InputLabel htmlFor="genre">GENRE</InputLabel>
+                    <FormControl >
+                        <InputLabel htmlFor="artist">Artists</InputLabel>
                         <Select
+                            sx={{ width: 200 }}
                             labelId="demo-simple-select-label"
-                            id="genre"
+                            id="artist"
                             multiple
-                            value={genre}
+                            value={artist}
                             label="Genre"
-                            onChange={handleGenreChange}
+                            onChange={handleArtistListChange}
                             renderValue={(selected) => selected.join(', ')}
                             MenuProps={MenuProps}
 
                         >
-                            {genres.map((g) => (
+                            {artists.map((g) => (
                                 <MenuItem key={g} value={g}>
-                                    <Checkbox checked={genre.indexOf(g) > -1} />
+                                    <Checkbox checked={artist.indexOf(g) > -1} />
                                     <ListItemText primary={g} />
                                 </MenuItem>
                             ))}
@@ -152,7 +191,20 @@ const Home = (props) => {
 
                     </FormControl>
                 </CardContent>
+                <CardContent>
+                    <FormControl>
+                        <TextField style={{width:200}}
+                            type="date" label="Release Date Start" InputLabelProps={{ shrink: true }} onChange={selectStartDate} />
+                    </FormControl>
 
+                </CardContent>
+                <CardContent>
+                    <FormControl>
+                        <TextField style={{width:200}}
+                            type="date" label="Release Date End" InputLabelProps={{ shrink: true }} onChange={selectEndDate} />
+                    </FormControl>
+
+                </CardContent>
                 <CardActions>
                     <Button variant="contained" color="primary" onClick={filterHandler}>APPLY</Button>
                 </CardActions>
@@ -171,8 +223,20 @@ const Home = (props) => {
         if (movieName !== "") {
             url += "&title=" + movieName;
         }
-        if (genre != []) {
+        if (genre !== []) {
             url += "&genre=" + genre.join(',');
+
+        }
+        if (artist !== []) {
+            url += "&artists=" + artist.join(',');
+
+        }
+        if (startDate !== '') {
+            url += "&start_date=" + startDate;
+
+        }
+        if (endDate != '') {
+            url += "&end_date=" + endDate;
 
         }
         fetch(url)
@@ -224,10 +288,7 @@ const Home = (props) => {
                                 root: classes.titleBar,
                                 title: classes.title,
                             }}
-                            actionIcon={
-                                <IconButton>
-                                </IconButton>
-                            }
+                           
                         />
                     </GridListTile>
                 ))}
