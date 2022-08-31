@@ -235,7 +235,7 @@ const Home = (props) => {
             url += "&start_date=" + startDate;
 
         }
-        if (endDate != '') {
+        if (endDate !== '') {
             url += "&end_date=" + endDate;
 
         }
@@ -278,7 +278,7 @@ const Home = (props) => {
         <Header baseUrl={props.baseUrl} />
         <div className="heading">Upcoming Movies</div>
         <div className={classes.root}>
-            <GridList cellHeight={250} className={classes.gridList} cols={6}>
+            <GridList cellHeight={350} className={classes.gridList} cols={6}>
                 {items.map(tile => (
                     <GridListTile key={tile.img}>
                         <img src={tile.poster_url} alt={tile.title} />
