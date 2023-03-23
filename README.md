@@ -10,5 +10,5 @@ Login/Signin Page
 ![image](https://user-images.githubusercontent.com/68020519/189483913-969de6f1-b990-4c70-a7cb-5c749192d819.png)
 
 
-Note : This project consumes api from local server that needs to be run on your local system. I will upload the details of it soon.
+
 
